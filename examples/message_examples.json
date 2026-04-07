@@ -1,0 +1,91 @@
+{
+  "description": "Example signaling messages for WebSocket communication",
+  "messages": {
+    "register_host": {
+      "description": "Host registers a new session",
+      "request": {
+        "type": "register",
+        "session_id": "ABC123",
+        "password": "optional_password",
+        "local_ip": "192.168.1.100",
+        "local_port": 9000
+      },
+      "response": {
+        "type": "registered",
+        "session_id": "ABC123"
+      }
+    },
+    "connect_client": {
+      "description": "Client connects to existing session",
+      "request": {
+        "type": "connect",
+        "session_id": "ABC123",
+        "password": "optional_password",
+        "local_ip": "192.168.1.200",
+        "local_port": 9001
+      },
+      "response_to_client": {
+        "type": "peer_info",
+        "peer": {
+          "local_ip": "192.168.1.100",
+          "local_port": 9000,
+          "public_ip": "203.0.113.1",
+          "public_port": 54321
+        }
+      },
+      "response_to_host": {
+        "type": "peer_info",
+        "peer": {
+          "local_ip": "192.168.1.200",
+          "local_port": 9001,
+          "public_ip": "203.0.113.2",
+          "public_port": 54322
+        }
+      }
+    },
+    "heartbeat": {
+      "description": "Keep-alive message",
+      "request": {
+        "type": "heartbeat"
+      },
+      "response": {
+        "type": "heartbeat"
+      }
+    },
+    "error_session_not_found": {
+      "description": "Error when session doesn't exist",
+      "response": {
+        "type": "error",
+        "message": "session not found"
+      }
+    },
+    "error_invalid_password": {
+      "description": "Error when password is incorrect",
+      "response": {
+        "type": "error",
+        "message": "invalid password"
+      }
+    },
+    "error_session_exists": {
+      "description": "Error when session ID already registered",
+      "response": {
+        "type": "error",
+        "message": "session already exists"
+      }
+    },
+    "error_session_full": {
+      "description": "Error when session already has a client",
+      "response": {
+        "type": "error",
+        "message": "session already has a client"
+      }
+    }
+  },
+  "notes": [
+    "All messages must be valid JSON",
+    "Public IP and port are automatically extracted by the server",
+    "Sessions expire after 1 hour (configurable) of inactivity",
+    "Heartbeat should be sent every 30 seconds to keep connection alive",
+    "Password is optional but recommended for security"
+  ]
+}
